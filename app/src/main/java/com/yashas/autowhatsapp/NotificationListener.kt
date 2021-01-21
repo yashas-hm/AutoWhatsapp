@@ -31,8 +31,6 @@ class NotificationListener : NotificationListenerService() {
             textData = extras.getCharSequence("android.text").toString()
         }
 
-        println(titleData)
-
         val msg = Intent("Msg")
         msg.putExtra("package", packageName)
         msg.putExtra("title", titleData)

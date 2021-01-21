@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yashas.autowhatsapp">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
 
         android:allowBackup="true"
