@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> {
                     setupHome()
+                    drawerLayout.closeDrawers()
                 }
 
                 R.id.create -> {
@@ -122,6 +123,7 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                     supportActionBar?.title = getString(R.string.anyStr, "Custom Replies")
                     navigationView.setCheckedItem(R.id.create)
+                    drawerLayout.closeDrawers()
                 }
 
             }

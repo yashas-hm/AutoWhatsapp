@@ -14,4 +14,6 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="anyStr">%s</string>
+    <string name="message">Message :</string>
+    <string name="reply_">Reply :</string>
 </resources>

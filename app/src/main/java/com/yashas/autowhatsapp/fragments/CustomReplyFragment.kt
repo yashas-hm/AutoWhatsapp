@@ -88,6 +88,7 @@ class CustomReplyFragment : Fragment() {
                         val modifiedReply = ReplyEntity(newReply, newMsg)
                         Utils.getFromDB(context!!, 3, modifiedReply).execute().get()
                         adapter.updateRecycler(modifiedReply, 2)
+                        mPopupWindow.dismiss()
                     }
                 }
 

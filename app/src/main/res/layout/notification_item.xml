@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/rounded_background"
     android:elevation="@dimen/_5sdp"
-    android:padding="@dimen/_5sdp"
+    android:padding="@dimen/_10sdp"
     android:layout_margin="@dimen/_5sdp">
 
     <androidx.appcompat.widget.AppCompatImageView

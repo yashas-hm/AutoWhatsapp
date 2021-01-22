@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -22,6 +23,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
         val reply: AppCompatTextView = view.findViewById(R.id.reply)
         val edit: AppCompatImageButton = view.findViewById(R.id.edit)
         val delete: AppCompatImageButton = view.findViewById(R.id.delete)
+        val layout: LinearLayout = view.findViewById(R.id.layout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReplyAdapterViewHolder {
@@ -35,8 +37,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
         holder.reply.text = context.getString(R.string.reply, reply.reply)
 
         if(reply in Utils.dummyReplies){
-            holder.edit.visibility = View.GONE
-            holder.delete.visibility = View.GONE
+            holder.layout.visibility = View.GONE
         }
 
         holder.edit.setOnClickListener {
@@ -73,6 +74,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
                             val modifiedReply = ReplyEntity(newReply, newMsg)
                             Utils.getFromDB(context, 3, modifiedReply).execute().get()
                             updateRecycler(modifiedReply, 2)
+                            mPopupWindow.dismiss()
                         }
                     }
                 }else{

@@ -7,7 +7,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/rounded_background"
     android:elevation="@dimen/_5sdp"
-    android:padding="@dimen/_5sdp"
+    android:paddingVertical="@dimen/_10sdp"
+    android:paddingHorizontal="@dimen/_8sdp"
     android:layout_margin="@dimen/_5sdp">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -34,6 +35,7 @@
         android:layout_marginTop="@dimen/_10sdp"/>
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
