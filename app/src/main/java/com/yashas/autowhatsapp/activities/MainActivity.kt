@@ -1,15 +1,16 @@
-package com.yashas.autowhatsapp
+package com.yashas.autowhatsapp.activities
 
 import android.Manifest
+import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.provider.Settings.SettingNotFoundException
+import android.text.TextUtils.SimpleStringSplitter
 import android.view.MenuItem
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -23,7 +24,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
-
+import com.yashas.autowhatsapp.R
+import com.yashas.autowhatsapp.fragments.CustomReplyFragment
+import com.yashas.autowhatsapp.fragments.NotificationRepliedFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,16 +44,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("Recycle")
-    private fun setup(){
+    private fun setup() {
         notificationAccessCheck()
         contactAccessCheck()
         initUI()
         setUpToolbar()
         actionBarToggle()
         listener()
+        setupHome()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
@@ -59,30 +67,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun contactAccessCheck(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)!= PackageManager.PERMISSION_GRANTED){
+    private fun contactAccessCheck() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
         }
     }
 
-    private fun notificationAccessCheck(){
+    private fun notificationAccessCheck() {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (!notificationManager.isNotificationPolicyAccessGranted) {
             MaterialAlertDialogBuilder(this)
                 .setTitle("Access Needed")
                 .setMessage("Grant notification reading access")
-                .setPositiveButton("Yes"){_, _ ->
+                .setPositiveButton("Yes") { _, _ ->
                     startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                 }
-                .setNeutralButton("No"){_,_ ->
+                .setNeutralButton("No") { _, _ ->
                     finishAffinity()
                 }
                 .show()
         }
     }
 
-    private fun listener(){
+    private fun setupHome() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame, NotificationRepliedFragment())
+            .commit()
+        supportActionBar?.title = getString(R.string.anyStr, "Notifications")
+        navigationView.setCheckedItem(R.id.home)
+    }
+
+    private fun listener() {
         navigationView.setNavigationItemSelectedListener {
             if (previousMenuItem != null) {
                 it.isChecked = false
@@ -91,13 +111,17 @@ class MainActivity : AppCompatActivity() {
             it.isChecked = true
             previousMenuItem = it
             navigationView.setCheckedItem(R.id.home)
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.home -> {
-
+                    setupHome()
                 }
 
                 R.id.create -> {
-
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame, CustomReplyFragment())
+                        .commit()
+                    supportActionBar?.title = getString(R.string.anyStr, "Custom Replies")
+                    navigationView.setCheckedItem(R.id.create)
                 }
 
             }
@@ -108,29 +132,30 @@ class MainActivity : AppCompatActivity() {
     private fun setUpToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar?.elevation = 0f
-        supportActionBar?.title = getString(R.string.home)
+        supportActionBar?.title = getString(R.string.anyStr, "Auto WhatsApp")
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun initUI(){
+    private fun initUI() {
         drawerLayout = findViewById(R.id.drawerLayout)
         coordinatorLayout = findViewById(R.id.coordinatorLayout)
         toolbar = findViewById(R.id.toolbar)
         frameLayout = findViewById(R.id.frame)
         navigationView = findViewById(R.id.navigationView)
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, IntentFilter("Msg"))
     }
 
-    private fun actionBarToggle(){
+    private fun actionBarToggle() {
         val actionBarDrawerToggle = ActionBarDrawerToggle(
             this@MainActivity,
             drawerLayout,
             R.string.open_drawer,
             R.string.close_drawer
         )
-        actionBarDrawerToggle.drawerArrowDrawable.color = ResourcesCompat.getColor(resources,
-            R.color.text_color, null)
+        actionBarDrawerToggle.drawerArrowDrawable.color = ResourcesCompat.getColor(
+            resources,
+            R.color.text_color, null
+        )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
     }
@@ -141,16 +166,5 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private val onNotice: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val packageName = intent.getStringExtra("package")
-            val titleData = intent.getStringExtra("title")
-            val textData = intent.getStringExtra("text")
-            println(packageName)
-            println(titleData)
-            println(textData)
-        }
     }
 }

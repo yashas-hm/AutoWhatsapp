@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/rounded_background"
+    android:backgroundTint="@color/background"
+    android:padding="@dimen/_5sdp"
+    android:layout_marginHorizontal="@dimen/_15sdp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Message      : "
+        android:textSize="@dimen/_10sdp"
+        android:fontFamily="@font/nunito_sans_regular"
+        android:textColor="@color/text_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/msgEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/msg"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@drawable/edit_text_background"
+        android:inputType="text"
+        android:maxLength="50"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:imeOptions="actionNext"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Reply           : "
+        android:textSize="@dimen/_10sdp"
+        android:fontFamily="@font/nunito_sans_regular"
+        android:textColor="@color/text_color"
+        app:layout_constraintTop_toBottomOf="@id/msgEt"
+        app:layout_constraintStart_toStartOf="@id/msg"
+        android:layout_marginTop="@dimen/_10sdp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/replyEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/reply"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLength="50"
+        android:background="@drawable/edit_text_background"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/replyEt"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:paddingHorizontal="@dimen/_10sdp">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/save"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_27sdp"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:fontFamily="@font/avenir"
+        android:background="@drawable/rounded_background"
+        android:backgroundTint="@color/colorPrimary"
+        android:padding="@dimen/_4sdp"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_27sdp"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:fontFamily="@font/avenir"
+        android:background="@drawable/rounded_background"
+        android:backgroundTint="@color/red"
+        android:layout_marginStart="@dimen/_80sdp"
+        android:padding="@dimen/_4sdp"
+        android:layout_weight="1"/>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

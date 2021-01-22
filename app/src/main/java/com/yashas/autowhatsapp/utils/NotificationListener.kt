@@ -1,4 +1,4 @@
-package com.yashas.autowhatsapp
+package com.yashas.autowhatsapp.utils
 
 import android.content.Context
 import android.content.Intent
@@ -14,6 +14,7 @@ class NotificationListener : NotificationListenerService() {
     lateinit var context: Context
     private var titleData = ""
     private var textData = ""
+    private lateinit var statusBarNotification: StatusBarNotification
 
     override fun onCreate() {
         super.onCreate()
@@ -27,14 +28,16 @@ class NotificationListener : NotificationListenerService() {
             titleData = extras.getString("android.title").toString()
         }
 
+        statusBarNotification = sbn
+
         if(extras.getCharSequence("android.text")!=null){
             textData = extras.getCharSequence("android.text").toString()
         }
-
-        val msg = Intent("Msg")
-        msg.putExtra("package", packageName)
-        msg.putExtra("title", titleData)
-        msg.putExtra("text", textData)
-        LocalBroadcastManager.getInstance(context).sendBroadcast(msg)
+        if(packageName=="com.whatsapp"){
+            val msg = Intent("Msg")
+            msg.putExtra("title", titleData)
+            msg.putExtra("text", textData)
+            LocalBroadcastManager.getInstance(context).sendBroadcast(msg)
+        }
     }
 }

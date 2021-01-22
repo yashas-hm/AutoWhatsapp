@@ -6,4 +6,6 @@
     <color name="background">#eeeeee</color>
     <color name="white">#FFFFFFFF</color>
     <color name="text_color">#263238</color>
+    <color name="red">#FF0000</color>
+    <color name="lightGrey">#BEBEBE</color>
 </resources>

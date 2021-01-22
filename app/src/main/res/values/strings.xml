@@ -1,9 +1,17 @@
 <resources>
-    <string name="app_name">AutoWhatsapp</string>
-    <string name="home">Home</string>
+    <string name="app_name">Auto WhatsApp</string>
+    <string name="home">Notifications</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="open_drawer">Open Drawer</string>
-    <string name="create">Create</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create">Custom Replies</string>
+    <string name="new_reply">New Reply</string>
+    <string name="no_notifications_right_now">No Notifications Right Now</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="msgBy">Message by : %s</string>
+    <string name="msg">Message    : %s</string>
+    <string name="reply">Reply      : %s</string>
+    <string name="autoReply">No auto reply found</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="anyStr">%s</string>
 </resources>

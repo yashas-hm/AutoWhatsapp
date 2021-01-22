@@ -1,8 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+
 }
+
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -37,6 +39,7 @@ dependencies {
 
     //sdp
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
     //room
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"
