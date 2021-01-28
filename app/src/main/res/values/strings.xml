@@ -16,4 +16,5 @@
     <string name="anyStr">%s</string>
     <string name="message">Message :</string>
     <string name="reply_">Reply :</string>
+    <string name="switch_1">Switch</string>
 </resources>

@@ -1,15 +1,12 @@
 package com.yashas.autowhatsapp.fragments
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Bundle
+import android.provider.Settings
 import android.service.notification.StatusBarNotification
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +24,8 @@ class NotificationRepliedFragment : Fragment(){
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: NotificationAdapter
     private lateinit var text: AppCompatTextView
+    private lateinit var switch: MenuItem
+    private lateinit var sharedPreferences: SharedPreferences
     private var notificationList = arrayListOf<Notification>()
     private var replyList = arrayListOf<ReplyEntity>()
     override fun onCreateView(
@@ -63,10 +62,36 @@ class NotificationRepliedFragment : Fragment(){
         recyclerView = view.findViewById(R.id.recycler)
         layoutManager = LinearLayoutManager(context)
         text = view.findViewById(R.id.noNotification)
+        sharedPreferences = context!!.getSharedPreferences("notification", Context.MODE_PRIVATE)
         replyList.addAll(Utils.dummyReplies)
         val fromDb = Utils.GetFromDB(context!!, 5).execute().get() as List<ReplyEntity>
         replyList.addAll(fromDb)
         LocalBroadcastManager.getInstance(context!!).registerReceiver(onNotice, IntentFilter("Msg"))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.switch_menu, menu)
+        switch = menu.findItem(R.id.switch_)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(sharedPreferences.getBoolean("is_on", false)){
+            sharedPreferences.edit().putBoolean("is_on", false).apply()
+            switch.icon.setTint(ResourcesCompat.getColor(resources, R.color.green, null))
+        }else{
+            sharedPreferences.edit().putBoolean("is_on", true).apply()
+            switch.icon.setTint(ResourcesCompat.getColor(resources, R.color.red, null))
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.switch_->{
+                startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private val onNotice: BroadcastReceiver = object : BroadcastReceiver() {
@@ -83,8 +108,11 @@ class NotificationRepliedFragment : Fragment(){
                 textData = extras.getCharSequence("android.text").toString()
             }
             var notification = Notification(titleData, textData, "")
+
+            replyList = Utils.update(context)
+
             for(reply in replyList){
-                if(textData==reply.msg){
+                if(textData.equals(reply.msg, ignoreCase = true)){
                     notification = Notification(titleData, textData, reply.reply)
                     break
                 }

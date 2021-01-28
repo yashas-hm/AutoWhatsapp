@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Replies")
 data class ReplyEntity (
-    @PrimaryKey
-    var id: Long,
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null,
     @ColumnInfo(name = "msg")
     var msg: String,
     @ColumnInfo(name = "reply")
     var reply: String
 ){
-    constructor(reply: String, msg: String): this(id = 0, msg = msg, reply = reply)
+    constructor(reply: String, msg: String): this(id=null, msg = msg, reply = reply)
 }

@@ -1,27 +1,18 @@
 package com.yashas.autowhatsapp.activities
 
-import android.Manifest
-import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.*
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.provider.Settings.SettingNotFoundException
-import android.text.TextUtils.SimpleStringSplitter
 import android.view.MenuItem
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.yashas.autowhatsapp.R
@@ -46,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Recycle")
     private fun setup() {
         notificationAccessCheck()
-        contactAccessCheck()
+//        contactAccessCheck()
         initUI()
         setUpToolbar()
         actionBarToggle()
@@ -54,28 +45,28 @@ class MainActivity : AppCompatActivity() {
         setupHome()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Contacts read permission denied", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == 1) {
+//            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this, "Contacts read permission denied", Toast.LENGTH_LONG).show()
+//            }
+//        }
+//    }
 
-    private fun contactAccessCheck() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_CONTACTS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
-        }
-    }
+//    private fun contactAccessCheck() {
+//        if (ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.READ_CONTACTS
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
+//        }
+//    }
 
     private fun notificationAccessCheck() {
         val notificationManager =
@@ -88,7 +79,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                 }
                 .setNeutralButton("No") { _, _ ->
-                    finishAffinity()
                 }
                 .show()
         }
@@ -163,10 +153,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == android.R.id.home) {
-            drawerLayout.openDrawer(GravityCompat.START)
+        when(item.itemId){
+            android.R.id.home ->{
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        when(supportFragmentManager.findFragmentById(R.id.frame)){
+            !is NotificationRepliedFragment->{
+                setupHome()
+            }
+
+            else-> super.onBackPressed()
+        }
     }
 }

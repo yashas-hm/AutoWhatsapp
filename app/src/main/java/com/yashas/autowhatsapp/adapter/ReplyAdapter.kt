@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yashas.autowhatsapp.R
 import com.yashas.autowhatsapp.database.ReplyEntity
+import com.yashas.autowhatsapp.utils.NotificationListener
 import com.yashas.autowhatsapp.utils.Utils
 
 class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity>): RecyclerView.Adapter<ReplyAdapter.ReplyAdapterViewHolder>() {
@@ -47,7 +48,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
             val mPopupWindow = PopupWindow(
                 options,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
             )
 
             val msgEt: AppCompatEditText = options.findViewById(R.id.msgEt)
@@ -92,6 +93,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
             mPopupWindow.showAtLocation(options, Gravity.CENTER, 0, 0)
         }
         holder.delete.setOnClickListener {
+            Utils.GetFromDB(context, 2, reply).execute().get()
             notifyItemRemoved(position)
             updateRecycler(reply,1)
         }

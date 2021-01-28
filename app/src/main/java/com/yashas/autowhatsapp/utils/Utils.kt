@@ -17,23 +17,23 @@ import java.util.*
 object Utils {
     private val REPLY_KEYWORDS = arrayOf("reply", "android.intent.extra.text")
 
-    fun getContactFromName(context: Context, name: String): String{
-        val resolver = context.contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            null,
-            ContactsContract.Contacts.DISPLAY_NAME + " = " + name,
-            null,
-            null
-        )
-        if(resolver!!.count>0){
-            while (resolver.moveToNext()){
-                return resolver.getString(resolver.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
-            }
-        }else{
-            Toast.makeText(context, "No contacts found", Toast.LENGTH_LONG).show()
-        }
-        return ""
-    }
+//    fun getContactFromName(context: Context, name: String): String{
+//        val resolver = context.contentResolver.query(
+//            ContactsContract.Contacts.CONTENT_URI,
+//            null,
+//            ContactsContract.Contacts.DISPLAY_NAME + " = " + name,
+//            null,
+//            null
+//        )
+//        if(resolver!!.count>0){
+//            while (resolver.moveToNext()){
+//                return resolver.getString(resolver.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
+//            }
+//        }else{
+//            Toast.makeText(context, "No contacts found", Toast.LENGTH_LONG).show()
+//        }
+//        return ""
+//    }
 
     val dummyReplies: List<ReplyEntity> = arrayListOf(
         ReplyEntity("hello", "Hi"),
@@ -75,6 +75,14 @@ object Utils {
             }
         }
         return null
+    }
+
+    fun update(context: Context): ArrayList<ReplyEntity> {
+        val replyList = arrayListOf<ReplyEntity>()
+        replyList.addAll(dummyReplies)
+        val fromDb = GetFromDB(context, 5).execute().get() as List<ReplyEntity>
+        replyList.addAll(fromDb)
+        return replyList
     }
 
     private fun isKnownReplyKey(resultKey: String): Boolean {

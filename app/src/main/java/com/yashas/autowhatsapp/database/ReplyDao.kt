@@ -20,5 +20,5 @@ interface ReplyDao {
     fun getAllReplies(): List<ReplyEntity>
 
     @Query("UPDATE Replies SET msg = :msg, reply = :reply where id = :id")
-    fun modify(id: Long, msg: String, reply: String)
+    fun modify(id: Long?, msg: String, reply: String)
 }

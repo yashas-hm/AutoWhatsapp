@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.yashas.autowhatsapp.R
 import com.yashas.autowhatsapp.adapter.ReplyAdapter
 import com.yashas.autowhatsapp.database.ReplyEntity
+import com.yashas.autowhatsapp.utils.NotificationListener
 import com.yashas.autowhatsapp.utils.Utils
 
 class CustomReplyFragment : Fragment() {
@@ -87,6 +88,7 @@ class CustomReplyFragment : Fragment() {
                     else -> {
                         val modifiedReply = ReplyEntity(newReply, newMsg)
                         Utils.GetFromDB(context!!, 1, modifiedReply).execute().get()
+                        Utils.update(context!!)
                         adapter.updateRecycler(modifiedReply, 2)
                         mPopupWindow.dismiss()
                     }
