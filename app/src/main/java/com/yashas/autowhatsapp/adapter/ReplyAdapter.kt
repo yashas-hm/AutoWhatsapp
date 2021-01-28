@@ -71,9 +71,9 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
                             msgEt.error = "Empty"
                         }
                         else -> {
-                            val modifiedReply = ReplyEntity(reply.id, newReply, newMsg)
+                            val modifiedReply = ReplyEntity(reply.id, newMsg, newReply)
                             Utils.GetFromDB(context, 3, modifiedReply).execute().get()
-                            updateRecycler(modifiedReply, 2)
+                            updateRecycler(modifiedReply, 3, position)
                             mPopupWindow.dismiss()
                         }
                     }
@@ -101,13 +101,18 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
         return list.size
     }
 
-    fun updateRecycler(replyEntity: ReplyEntity, mode:Int){
+    fun updateRecycler(replyEntity: ReplyEntity, mode:Int, position: Int? = null){
         when(mode){
             1->{
                 list.remove(replyEntity)
                 notifyDataSetChanged()
             }
             2->{
+                list.add(replyEntity)
+                notifyDataSetChanged()
+            }
+            3->{
+                list.removeAt(position!!)
                 list.add(replyEntity)
                 notifyDataSetChanged()
             }
