@@ -1,5 +1,6 @@
 package com.yashas.autowhatsapp.utils
 
+import androidx.core.app.RemoteInput
 import android.content.Context
 import android.os.AsyncTask
 import android.provider.ContactsContract
@@ -22,7 +23,7 @@ object Utils {
     }
 
     val dummyReplies: List<ReplyEntity> = arrayListOf(
-        ReplyEntity("Hi", "hello"),
+        ReplyEntity( "hello", "Hi"),
         ReplyEntity("Fine", "how are you"),
         ReplyEntity("fine", "how r u"),
         ReplyEntity("nothing much bored", "supp")

@@ -13,5 +13,5 @@ data class ReplyEntity (
     @ColumnInfo(name = "reply")
     var reply: String
 ){
-    constructor(reply: String, msg: String): this(0, reply, msg)
+    constructor(reply: String, msg: String): this(id = 0, msg = msg, reply = reply)
 }

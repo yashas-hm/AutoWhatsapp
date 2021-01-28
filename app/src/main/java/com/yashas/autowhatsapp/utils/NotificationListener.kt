@@ -1,12 +1,17 @@
 package com.yashas.autowhatsapp.utils
 
-import androidx.core.app.RemoteInput
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.app.RemoteInput
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.yashas.autowhatsapp.database.ReplyEntity
 import java.util.*
 
 
@@ -15,100 +20,94 @@ class NotificationListener : NotificationListenerService() {
     @Suppress("PrivatePropertyName")
     private val TAG = this.javaClass.simpleName
     lateinit var context: Context
-    private var titleData = ""
     private var textData = ""
+    private var replyList = arrayListOf<ReplyEntity>()
 
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
+        replyList.addAll(Utils.dummyReplies)
+        val fromDb = Utils.getFromDB(context, 5).execute().get() as List<ReplyEntity>
+        replyList.addAll(fromDb)
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         val packageName = sbn.packageName
         val extras = sbn.notification.extras
-        if(extras.getString("android.title")!=null){
-            titleData = extras.getString("android.title").toString()
-        }
         if(extras.getCharSequence("android.text")!=null){
             textData = extras.getCharSequence("android.text").toString()
         }
-        val ri = arrayListOf<RemoteInput>()
-        var v: RemoteInput
-        val wearableExtender: NotificationCompat.WearableExtender =
-            NotificationCompat.WearableExtender(sbn.notification)
-        val actions: List<NotificationCompat.Action> = wearableExtender.actions
-        for (act in actions) {
-            if (act.remoteInputs != null) {
-                ri.addAll(act.remoteInputs)
-
+        if(!sbn.isOngoing){
+            if(packageName=="com.whatsapp"&&!textData.contains("new messages")){
+                val msg = Intent("Msg")
+                msg.putExtra("notification", sbn)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(msg)
+                for(reply in replyList){
+                    if(textData==reply.msg){
+                        sendMessage(sbn, reply.reply, context)
+                        break
+                    }
+                }
             }
-
         }
-        if(packageName=="com.whatsapp"){
-            val msg = Intent("Msg")
-            msg.putExtra("notification", sbn)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(msg)
-        }
-
     }
 
-//    /**
-//     * To extract WearNotification with RemoteInputs that we can use to respond later on
-//     * @param statusBarNotification
-//     * @return
-//     */
-//    private fun extractWearNotification(statusBarNotification: StatusBarNotification): NotificationWear {
-//        //Should work for communicators such:"com.whatsapp", "com.facebook.orca", "com.google.android.talk", "jp.naver.line.android", "org.telegram.messenger"
-//        val notificationWear = NotificationWear()
-//        notificationWear.packageName = statusBarNotification.packageName
-//        val wearableExtender: NotificationCompat.WearableExtender =
-//            NotificationCompat.WearableExtender(statusBarNotification.notification)
-//        val actions: List<NotificationCompat.Action> = wearableExtender.actions
-//        for (act in actions) {
-//            if (act.remoteInputs != null) {
-//                notificationWear.remoteInputs.addAll(act.remoteInputs)
-//            }
-//        }
-//        val pages: List<Notification> = wearableExtender.pages
-//        notificationWear.pages.addAll(pages)
-//        notificationWear.bundle = statusBarNotification.notification.extras
-//        notificationWear.tag =
-//            statusBarNotification.tag //TODO find how to pass Tag with sending PendingIntent, might fix Hangout problem
-//        notificationWear.pendingIntent = statusBarNotification.notification.contentIntent
-//        return notificationWear
-//    }
-//
-//    /**
-//     * Sample of how it is possible to do manually without using NotificationCompat.WearableExtender constructor
-//     * @param statusBarNotification
-//     * @return
-//     */
-//    private fun extractOldWearNotification(statusBarNotification: StatusBarNotification): NotificationWear {
-//        //Should work for communicators such:"com.whatsapp", "com.facebook.orca", "com.google.android.talk", "jp.naver.line.android", "org.telegram.messenger"
-//        val notificationWear = NotificationWear()
-//        val bundle = statusBarNotification.notification.extras
-//        for (key in bundle.keySet()) {
-//            val value = bundle[key]
-//            if ("android.wearable.EXTENSIONS" == key) {
-//                val wearBundle = value as Bundle?
-//                for (keyInner in wearBundle!!.keySet()) {
-//                    val valueInner = wearBundle[keyInner]
-//                    if (keyInner != null && valueInner != null) {
-//                        if ("actions" == keyInner && valueInner is ArrayList<*>) {
-//                            val actions= arrayListOf<Notification.Action>()
-//                            actions.addAll(valueInner as Collection<Notification.Action>)
-//                            for (act in actions) {
-//                                if (act.remoteInputs != null) { //API > 20 needed
-//                                    val remoteInputs: Array<RemoteInput> = act.remoteInputs
-//                                }
-//                            }
-//                            //get remote inputs and save them to notificationWear... long spaghetti code
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return notificationWear
-//    }
+    private fun sendMessage(sbn: StatusBarNotification, reply: String, context: Context) {
+        val wearableExtender = NotificationCompat.WearableExtender(sbn.notification)
+        val wearableActions : List<NotificationCompat.Action> = wearableExtender.actions
+        val remoteInputs = arrayListOf<RemoteInput>()
+        val remotes = arrayListOf<RemoteInput>()
+        val bundle = Bundle()
+        val pendingIntent = sbn.notification.contentIntent
+        val intent = Intent()
 
+
+        for(action in wearableActions){
+            if(action.remoteInputs!=null){
+                remoteInputs.addAll(action.remoteInputs)
+            }
+        }
+
+//        val actualInputs = ArrayList<RemoteInput>()
+//
+//        for (input in remoteInputs) {
+//            bundle.putCharSequence(input.resultKey, reply)
+//            val builder = RemoteInput.Builder(input.resultKey)
+//            builder.setLabel(input.label)
+//            builder.setChoices(input.choices)
+//            builder.addExtras(input.extras)
+//            actualInputs.add(builder.build())
+//        }
+//
+//        val inputs = actualInputs.toTypedArray()
+//        RemoteInput.addResultsToIntent(inputs, intent, bundle)
+//        try{
+//            pendingIntent.send(context, 0, intent)
+//        }catch (e: PendingIntent.CanceledException){
+//            println(e)
+//            Toast.makeText(context, "Some error occurred", Toast.LENGTH_LONG).show()
+//        }
+//        println("Working")
+
+        for(inputs in remoteInputs){
+            bundle.putCharSequence(inputs.resultKey, reply)
+            val builder = RemoteInput.Builder(inputs.resultKey)
+                .setLabel(inputs.label)
+                .setChoices(inputs.choices)
+                .setAllowFreeFormInput(inputs.allowFreeFormInput)
+                .addExtras(inputs.extras)
+            remotes.add(builder.build())
+        }
+
+        val inputs = remotes.toTypedArray()
+
+        RemoteInput.addResultsToIntent(inputs, intent, bundle)
+        try{
+            pendingIntent.send(context, 0, intent)
+            println("worked")
+        }catch (e: PendingIntent.CanceledException){
+            println(e)
+            Toast.makeText(context, "Some error occurred", Toast.LENGTH_LONG).show()
+        }
+    }
 }
