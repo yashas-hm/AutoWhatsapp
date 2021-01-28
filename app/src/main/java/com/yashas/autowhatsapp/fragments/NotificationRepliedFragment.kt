@@ -64,7 +64,7 @@ class NotificationRepliedFragment : Fragment(){
         layoutManager = LinearLayoutManager(context)
         text = view.findViewById(R.id.noNotification)
         replyList.addAll(Utils.dummyReplies)
-        val fromDb = Utils.getFromDB(context!!, 5).execute().get() as List<ReplyEntity>
+        val fromDb = Utils.GetFromDB(context!!, 5).execute().get() as List<ReplyEntity>
         replyList.addAll(fromDb)
         LocalBroadcastManager.getInstance(context!!).registerReceiver(onNotice, IntentFilter("Msg"))
     }

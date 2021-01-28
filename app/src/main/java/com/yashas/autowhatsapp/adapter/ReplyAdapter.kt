@@ -72,7 +72,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
                         }
                         else -> {
                             val modifiedReply = ReplyEntity(newReply, newMsg)
-                            Utils.getFromDB(context, 3, modifiedReply).execute().get()
+                            Utils.GetFromDB(context, 3, modifiedReply).execute().get()
                             updateRecycler(modifiedReply, 2)
                             mPopupWindow.dismiss()
                         }

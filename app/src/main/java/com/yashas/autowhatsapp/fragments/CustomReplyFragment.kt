@@ -47,7 +47,7 @@ class CustomReplyFragment : Fragment() {
         layoutManager = LinearLayoutManager(context)
         addButton = view.findViewById(R.id.add)
         replyList.addAll(Utils.dummyReplies)
-        val fromDb = Utils.getFromDB(context!!, 5).execute().get() as List<ReplyEntity>
+        val fromDb = Utils.GetFromDB(context!!, 5).execute().get() as List<ReplyEntity>
         replyList.addAll(fromDb)
     }
 
@@ -86,7 +86,7 @@ class CustomReplyFragment : Fragment() {
                     }
                     else -> {
                         val modifiedReply = ReplyEntity(newReply, newMsg)
-                        Utils.getFromDB(context!!, 3, modifiedReply).execute().get()
+                        Utils.GetFromDB(context!!, 3, modifiedReply).execute().get()
                         adapter.updateRecycler(modifiedReply, 2)
                         mPopupWindow.dismiss()
                     }
