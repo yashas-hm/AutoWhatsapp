@@ -1,6 +1,6 @@
 # Auto Whatsapp
 
-Easy Built UI to add custom replies
+Easy Built UI to add custom replies <br>
 Replies instantly 
 
 # ScreenShots
