@@ -71,7 +71,7 @@ class ReplyAdapter(val context: Context, private var list: ArrayList<ReplyEntity
                             msgEt.error = "Empty"
                         }
                         else -> {
-                            val modifiedReply = ReplyEntity(newReply, newMsg)
+                            val modifiedReply = ReplyEntity(reply.id, newReply, newMsg)
                             Utils.GetFromDB(context, 3, modifiedReply).execute().get()
                             updateRecycler(modifiedReply, 2)
                             mPopupWindow.dismiss()

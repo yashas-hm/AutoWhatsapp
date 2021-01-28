@@ -86,7 +86,7 @@ class CustomReplyFragment : Fragment() {
                     }
                     else -> {
                         val modifiedReply = ReplyEntity(newReply, newMsg)
-                        Utils.GetFromDB(context!!, 3, modifiedReply).execute().get()
+                        Utils.GetFromDB(context!!, 1, modifiedReply).execute().get()
                         adapter.updateRecycler(modifiedReply, 2)
                         mPopupWindow.dismiss()
                     }
