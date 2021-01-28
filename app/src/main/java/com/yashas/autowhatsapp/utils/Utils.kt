@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
 import android.provider.ContactsContract
-import android.service.notification.StatusBarNotification
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -13,6 +12,7 @@ import androidx.room.Room
 import com.yashas.autowhatsapp.database.ReplyDatabase
 import com.yashas.autowhatsapp.database.ReplyEntity
 import com.yashas.autowhatsapp.model.Action
+import java.util.*
 
 object Utils {
     private val REPLY_KEYWORDS = arrayOf("reply", "android.intent.extra.text")
@@ -78,11 +78,11 @@ object Utils {
     }
 
     private fun isKnownReplyKey(resultKey: String): Boolean {
-        var resultKey = resultKey
-        if (TextUtils.isEmpty(resultKey)) return false
-        resultKey = resultKey.toLowerCase()
+        var resultKey1 = resultKey
+        if (TextUtils.isEmpty(resultKey1)) return false
+        resultKey1 = resultKey1.toLowerCase(Locale.ROOT)
         for (keyword in REPLY_KEYWORDS){
-            if (resultKey.contains(keyword))
+            if (resultKey1.contains(keyword))
                 return true
         }
         return false

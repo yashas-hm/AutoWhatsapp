@@ -3,12 +3,9 @@ package com.yashas.autowhatsapp.utils
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import androidx.core.app.RemoteInput
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.yashas.autowhatsapp.database.ReplyEntity
 import com.yashas.autowhatsapp.model.Action
