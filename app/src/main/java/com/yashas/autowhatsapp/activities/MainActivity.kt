@@ -37,36 +37,12 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Recycle")
     private fun setup() {
         notificationAccessCheck()
-//        contactAccessCheck()
         initUI()
         setUpToolbar()
         actionBarToggle()
         listener()
         setupHome()
     }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == 1) {
-//            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this, "Contacts read permission denied", Toast.LENGTH_LONG).show()
-//            }
-//        }
-//    }
-
-//    private fun contactAccessCheck() {
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.READ_CONTACTS
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
-//        }
-//    }
 
     private fun notificationAccessCheck() {
         val notificationManager =
@@ -162,6 +138,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawers()
+        }
         when(supportFragmentManager.findFragmentById(R.id.frame)){
             !is NotificationRepliedFragment->{
                 setupHome()
