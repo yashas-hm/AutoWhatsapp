@@ -40,10 +40,9 @@ class NotificationListener : NotificationListenerService() {
             titleText = extras.getCharSequence("android.title").toString()
         }
 
-        replyList = Utils.update(context)
-
         if(!sbn.isOngoing){
             if(packageName=="com.whatsapp"&&!textData.contains("new messages")&&textData != "📷 Photo"&&titleText!="You"){
+                replyList = Utils.update(context)
                 val msg = Intent("Msg")
                 msg.putExtra("notification", sbn)
                 LocalBroadcastManager.getInstance(context).sendBroadcast(msg)

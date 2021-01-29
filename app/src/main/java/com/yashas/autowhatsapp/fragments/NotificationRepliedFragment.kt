@@ -1,5 +1,6 @@
 package com.yashas.autowhatsapp.fragments
 
+import android.app.NotificationManager
 import android.content.*
 import android.os.Bundle
 import android.provider.Settings
@@ -24,8 +25,7 @@ class NotificationRepliedFragment : Fragment(){
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: NotificationAdapter
     private lateinit var text: AppCompatTextView
-    private lateinit var switch: MenuItem
-    private lateinit var sharedPreferences: SharedPreferences
+    private var switch: MenuItem? = null
     private var notificationList = arrayListOf<Notification>()
     private var replyList = arrayListOf<ReplyEntity>()
     override fun onCreateView(
@@ -39,6 +39,7 @@ class NotificationRepliedFragment : Fragment(){
     }
 
     private fun setup(view: View){
+        setHasOptionsMenu(true)
         initUI(view)
         setupRecycler()
         checkNotifications()
@@ -62,7 +63,6 @@ class NotificationRepliedFragment : Fragment(){
         recyclerView = view.findViewById(R.id.recycler)
         layoutManager = LinearLayoutManager(context)
         text = view.findViewById(R.id.noNotification)
-        sharedPreferences = context!!.getSharedPreferences("notification", Context.MODE_PRIVATE)
         replyList.addAll(Utils.dummyReplies)
         val fromDb = Utils.GetFromDB(context!!, 5).execute().get() as List<ReplyEntity>
         replyList.addAll(fromDb)
@@ -74,15 +74,19 @@ class NotificationRepliedFragment : Fragment(){
         switch = menu.findItem(R.id.switch_)
     }
 
+    private fun checkSwitch(){
+        val notificationManager =
+            context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if(notificationManager.isNotificationPolicyAccessGranted){
+            switch?.icon?.setTint(ResourcesCompat.getColor(resources, R.color.green, null))
+        }else{
+            switch?.icon?.setTint(ResourcesCompat.getColor(resources, R.color.red, null))
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        if(sharedPreferences.getBoolean("is_on", false)){
-            sharedPreferences.edit().putBoolean("is_on", false).apply()
-            switch.icon.setTint(ResourcesCompat.getColor(resources, R.color.green, null))
-        }else{
-            sharedPreferences.edit().putBoolean("is_on", true).apply()
-            switch.icon.setTint(ResourcesCompat.getColor(resources, R.color.red, null))
-        }
+        checkSwitch()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

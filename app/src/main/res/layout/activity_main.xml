@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
+                android:background="@color/teal_700"
                 app:popupTheme="@dimen/_1sdp"
                 app:titleTextColor="@color/background"
                 app:titleMarginStart="@dimen/_20sdp"
