@@ -1,6 +1,5 @@
 package com.yashas.autowhatsapp.activities
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.*
 import android.os.Bundle
@@ -34,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setup()
     }
 
-    @SuppressLint("Recycle")
     private fun setup() {
         notificationAccessCheck()
         initUI()
