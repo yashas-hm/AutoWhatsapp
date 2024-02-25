@@ -1,6 +1,6 @@
-# AutoChat Assistant 🤖📱
+# AutoWhatsapp 🤖📱
 
-AutoChat Assistant is an Android application that automates your WhatsApp replies, making your messaging experience more convenient and efficient. With AutoChat Assistant, you can customize automatic responses and let the app handle your conversations seamlessly in the background.
+AutoWhatsapp is an Android application that automates your WhatsApp replies, making your messaging experience more convenient and efficient. With AutoWhatsapp, you can customize automatic responses and let the app handle your conversations seamlessly in the background.
 
 ## Features 🚀
 
@@ -12,17 +12,17 @@ AutoChat Assistant is an Android application that automates your WhatsApp replie
 
 ## How It Works 🛠️
 
-AutoChat Assistant monitors incoming WhatsApp notifications and automatically sends replies based on your predefined messages. It operates silently in the background, seamlessly integrating with your messaging experience.
+AutoWhatsapp monitors incoming WhatsApp notifications and automatically sends replies based on your predefined messages. It operates silently in the background, seamlessly integrating with your messaging experience.
 
 ## Installation Guide 📥
 
-To use AutoChat Assistant:
+To use AutoWhatsapp:
 
 1. Clone the repository.
 2. Install the app on your Android device.
 3. Grant necessary permissions for notification access and message sending.
 4. Customize your replies within the app.
-5. Activate AutoChat Assistant to start automating your WhatsApp responses.
+5. Activate AutoWhatsapp to start automating your WhatsApp responses.
 
 ## Contributions 🤝
 
@@ -30,11 +30,11 @@ Contributions are welcome! If you have ideas for improvements or new features, f
 
 ## Disclaimer ⚠️
 
-AutoChat Assistant is designed for convenience and productivity. However, use it responsibly, respecting privacy and adhering to relevant laws and regulations regarding automated messaging.
+AutoWhatsapp is designed for convenience and productivity. However, use it responsibly, respecting privacy and adhering to relevant laws and regulations regarding automated messaging.
 
 ## Get Started 🚀
 
-Ready to streamline your WhatsApp conversations? Download AutoChat Assistant now and let your messages flow effortlessly, giving you more time for what matters most. 📱✨
+Ready to streamline your WhatsApp conversations? Download AutoWhatsapp now and let your messages flow effortlessly, giving you more time for what matters most. 📱✨
 
 ## Screenshots 📸
 
